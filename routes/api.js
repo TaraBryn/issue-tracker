@@ -12,30 +12,34 @@ var expect = require('chai').expect;
 var MongoClient = require('mongodb');
 var ObjectId = require('mongodb').ObjectID;
 
-const CONNECTION_STRING = process.env.DB; //MongoClient.connect(CONNECTION_STRING, function(err, db) {});
+const CONNECTION_STRING = process.env.DB; 
 
-module.exports = function (app) {
-
-  app.route('/api/issues/:project')
+MongoClient.connect(CONNECTION_STRING, function(err, db) {
   
-  .get(function (req, res){
-    var project = req.params.project;
+  module.exports = function (app) {
 
-  })
+    app.route('/api/issues/:project')
 
-  .post(function (req, res){
-    var project = req.params.project;
+    .get(function (req, res){
+      var project = req.params.project;
+    })
 
-  })
+    .post(function (req, res){
+      var project = req.params.project;
+      
+    })
 
-  .put(function (req, res){
-    var project = req.params.project;
+    .put(function (req, res){
+      var project = req.params.project;
 
-  })
+    })
 
-  .delete(function (req, res){
-    var project = req.params.project;
+    .delete(function (req, res){
+      var project = req.params.project;
+    });
 
-  });
-    
-};
+  };
+
+  
+});
+
