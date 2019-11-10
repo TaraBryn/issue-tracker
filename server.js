@@ -18,7 +18,7 @@ app.use(cors({origin: '*'})); //For FCC testing purposes only
 
 app.use(helmet({
   hsts: {force: true},
-  contentSecurity
+  contentSecurityPolicy: {directives: {defaultSrc: ["'self'"]}}
 }))
 
 
