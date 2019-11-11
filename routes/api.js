@@ -23,22 +23,40 @@ module.exports = function (app, db) {
     var project = req.params.project;
     console.log('GET project ', project);
     console.log('GET body ', req.body);
-    db.collection('projects').findAndModify(
-      {name: req.params.project}, {},
-      {
-        $setOnInsert: {
-          name: req.params.project,
-          issues: {}
-        }
-      }
-    )
   })
 
   .post(function (req, res){
     var project = req.params.project;
     console.log('POST project ', project);
     console.log('POST body ', req.body);
-    
+    db.collection('projects').findAndModify(
+      {name: req.params.project},
+      {
+        $setOnInsert: {
+          name: req.params.project,
+          issues: [
+            {
+              _id: new ObjectId(),
+              created_on: new Date(),
+              updated_on: new Date(),
+              issue_title: req.body.issue_title,
+              issue_text: req.body.issue_text,
+              created_by: req.body.created__by,
+              assigned_to: req.body.assigned_to,
+              open: true
+            }
+          ]
+        },
+        $push: {
+          issues: {
+            _id: new ObjectId(),
+            crteated_on: new Date(),
+            updated_on: new Date(),
+            issue_title:
+          }
+        }
+      }
+    )
   })
 
   .put(function (req, res){
