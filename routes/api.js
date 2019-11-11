@@ -34,28 +34,23 @@ module.exports = function (app, db) {
       {
         $setOnInsert: {
           name: req.params.project,
-          issues: [
-            {
-              _id: new ObjectId(),
-              created_on: new Date(),
-              updated_on: new Date(),
-              issue_title: req.body.issue_title,
-              issue_text: req.body.issue_text,
-              created_by: req.body.created__by,
-              assigned_to: req.body.assigned_to,
-              open: true
-            }
-          ]
+          issues: []
         },
         $push: {
           issues: {
             _id: new ObjectId(),
             crteated_on: new Date(),
             updated_on: new Date(),
-            issue_title:
+            issue_title: req.body.issue_title,
+            issue_text: req.body.issue_text,
+            created_by: req.body.created_by,
+            assigned_to: req.body.assigned_to,
+            open: true
           }
         }
-      }
+      },
+      {upsert: true, new: true},
+      (err, doc) => err || doc.value
     )
   })
 
