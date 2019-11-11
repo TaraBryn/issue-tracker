@@ -29,7 +29,7 @@ module.exports = function (app, db) {
     var project = req.params.project;
     console.log('POST project ', project);
     console.log('POST body ', req.body);
-
+    
   })
 
   .put(function (req, res){
