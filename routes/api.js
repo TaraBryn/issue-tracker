@@ -23,6 +23,15 @@ module.exports = function (app, db) {
     var project = req.params.project;
     console.log('GET project ', project);
     console.log('GET body ', req.body);
+    db.collection('projects').findAndModify(
+      {name: req.params.project}, {},
+      {
+        $setOnInsert: {
+          name: req.params.project,
+          issues: {}
+        }
+      }
+    )
   })
 
   .post(function (req, res){
