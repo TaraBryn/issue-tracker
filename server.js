@@ -5,6 +5,7 @@ var bodyParser  = require('body-parser');
 var expect      = require('chai').expect;
 var cors        = require('cors');
 const helmet = require('helmet');
+const MongoClient = require('mongodb');
 
 var apiRoutes         = require('./routes/api.js');
 var fccTestingRoutes  = require('./routes/fcctesting.js');
@@ -26,6 +27,7 @@ app.use(helmet({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+MongoClient.connect(process.env.DB, function(err, db) {
 //Sample front-end
 app.route('/:project/')
   .get(function (req, res) {
@@ -42,7 +44,7 @@ app.route('/')
 fccTestingRoutes(app);
 
 //Routing for API 
-apiRoutes(app);  
+apiRoutes(app, db);  
     
 //404 Not Found Middleware
 app.use(function(req, res, next) {
@@ -66,6 +68,8 @@ app.listen(process.env.PORT || 3000, function () {
       }
     }, 3500);
   }
+});
+  
 });
 
 module.exports = app; //for testing

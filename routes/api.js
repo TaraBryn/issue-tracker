@@ -14,11 +14,11 @@ var ObjectId = require('mongodb').ObjectID;
 
 const CONNECTION_STRING = process.env.DB; 
 
-module.exports = function (app) {
+module.exports = function (app, db) {
   
-  MongoClient.connect(CONNECTION_STRING, function(err, db) {
+  //MongoClient.connect(CONNECTION_STRING, function(err, db) {
     
-    if (err) return console.log(err);
+    //if (err) return console.log(err);
 
     app.route('/api/issues/:project')
 
@@ -47,7 +47,7 @@ module.exports = function (app) {
       console.log('DELETE body', req.body);
     });
     
-  });
+  //});
 
 };
 
