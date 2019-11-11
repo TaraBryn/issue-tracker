@@ -27,13 +27,11 @@ module.exports = function (app, db) {
 
   .post(function (req, res){
     var project = req.params.project;
-    console.log('POST project ', project);
-    console.log('POST body ', req.body);
     db.collection('projects').findAndModify(
       {name: req.params.project},
       {
         $setOnInsert: {
-          name: req.params.project,
+          project,
           issues: []
         },
         $push: {
