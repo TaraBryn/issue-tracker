@@ -56,7 +56,9 @@ module.exports = function (app, db) {
     var project = req.params.project;
     console.log('PUT project ', project);
     console.log('PUT body', req.body);
-    
+    db.collection('projects').update(
+      
+    )
   })
 
   .delete(function (req, res){
