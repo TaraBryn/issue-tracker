@@ -29,7 +29,7 @@ module.exports = function (app, db) {
     var project = req.params.project;
     console.log(project);
     db.collection('projects').findAndModify(
-      {project}, {},
+      {project}, {/*this would be th*/},
       {
         $setOnInsert: {
           project,
