@@ -58,8 +58,8 @@ module.exports = function (app, db) {
     //console.log('PUT project ', project);
     //console.log('PUT body', req.body);
     db.collection('projects').find(
-      {"project": req.body._id}, {},
-      (err, doc)=>err || doc
+      {"issues": {_id: req.body._id}}, {},
+      (err, doc)=>console.log(err || doc)
     ).forEach(item=>{
       console.log(item);
     })
