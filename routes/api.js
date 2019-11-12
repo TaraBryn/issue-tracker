@@ -47,8 +47,8 @@ module.exports = function (app, db) {
           }
         }
       },
-      {upsert: true},
-      err => err
+      {upsert: true, new: true},
+      (err, doc) => err ? false : doc.issues[doc.issues.length - 1]
     )
   })
 
