@@ -57,10 +57,12 @@ module.exports = function (app, db) {
     var project = req.params.project;
     //console.log('PUT project ', project);
     //console.log('PUT body', req.body);
-    console.log(db.collection('projects').find(
-      {"issues._id": new ObjectId(req.body._id)},
+    db.collection('projects').find(
+      {"project": req.body._id}, {},
       (err, doc)=>err || doc
-    ))
+    ).forEach(item=>{
+      console.log(item);
+    })
   })
 
   .delete(function (req, res){
