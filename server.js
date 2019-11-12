@@ -21,7 +21,10 @@ app.use(helmet({
   hsts: {force: true},
   contentSecurityPolicy: {directives: {
     defaultSrc: ["'self'"], 
-    styleSrc: ["'self'", "'unsafe-inline'"], scriptSrc: ["'self'", "'unsafe-inline'"]}}
+    styleSrc: ["'self'", "'unsafe-inline'"], 
+    scriptSrc: ["'self'", "'unsafe-inline'", "https://code.jquery.com/"],
+    imgSrc: ["'self'", "https://hyperdev.com/", "http://glitch.com/"]
+  }}
 }))
 
 
