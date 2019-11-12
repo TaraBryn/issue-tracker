@@ -27,6 +27,7 @@ module.exports = function (app, db) {
 
   .post(function (req, res){
     var project = req.params.project;
+    console.log(project);
     db.collection('projects').findAndModify(
       {project},
       {
@@ -37,7 +38,7 @@ module.exports = function (app, db) {
         $push: {
           issues: {
             _id: new ObjectId(),
-            crteated_on: new Date(),
+            created_on: new Date(),
             updated_on: new Date(),
             issue_title: req.body.issue_title,
             issue_text: req.body.issue_text,
@@ -48,7 +49,7 @@ module.exports = function (app, db) {
         }
       },
       {upsert: true, new: true},
-      (err, doc) => err ? false : doc.issues[doc.issues.length - 1]
+      (err, doc) => console.log(err ? false : doc)
     )
   })
 
