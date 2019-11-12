@@ -57,10 +57,10 @@ module.exports = function (app, db) {
     var project = req.params.project;
     //console.log('PUT project ', project);
     //console.log('PUT body', req.body);
-    db.collection('projects').find(
-      {"issues._id": req.body._id},
-      (err, doc)=>console.log(err || doc)
-    )
+    console.log(db.collection('projects').find(
+      {"issues._id": new ObjectId(req.body._id)},
+      (err, doc)=>err || doc
+    ))
   })
 
   .delete(function (req, res){
