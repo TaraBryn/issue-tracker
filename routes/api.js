@@ -49,17 +49,17 @@ module.exports = function (app, db) {
         }
       },
       {upsert: true, new: true},
-      (err, doc) => err ? {error: true, err} : {error: false, doc}
+      (err, doc) => err ? {error: true, err} : {error: false, document: doc.value}
     )
   })
 
   .put(function (req, res){
     var project = req.params.project;
-    console.log('PUT project ', project);
-    console.log('PUT body', req.body);
+    //console.log('PUT project ', project);
+    //console.log('PUT body', req.body);
     db.collection('projects').find(
-      {$elemMatch: {issues: {id: req.body._id}}},
-      (err, doc)=>console.log(doc)
+      {$elemMatch: {issues: {_id: new ObjectId(req.body._id)}}}, {},
+      (err, doc)=>console.log(err)
     )
   })
 
