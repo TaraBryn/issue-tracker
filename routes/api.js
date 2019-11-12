@@ -49,7 +49,7 @@ module.exports = function (app, db) {
         }
       },
       {upsert: true, new: true},
-      (err, doc) => console.log(err ? err : doc)
+      (err, doc) => err ? {error: true, err} : {error: false, doc}
     )
   })
 
