@@ -28,9 +28,13 @@ module.exports = function (app, db) {
   .post(function (req, res){
     var project = req.params.project;
     console.log(project);
-    db.collection('projects').findAndModify(
+    db.collection('prjects').findAndModify({
+      query: {project},
+      
+    })
+    /*db.collection('projects').findAndModify(
       {project}, 
-      {/*this would be the sort options*/},
+      {/*this would be the sort options},
       {
         $setOnInsert: {
           project,
@@ -60,7 +64,7 @@ module.exports = function (app, db) {
       },
       {upsert: true, new: true},
       (err, doc) => console.log(err ? err : doc)
-    )
+    )*/
   })
 
   .put(function (req, res){
