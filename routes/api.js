@@ -28,7 +28,7 @@ module.exports = function (app, db) {
   .post(function (req, res){
     var project = req.params.project;
     db.collection('projects').findAndModify(
-      {name: req.params.project},
+      {project},
       {
         $setOnInsert: {
           project,
@@ -47,8 +47,8 @@ module.exports = function (app, db) {
           }
         }
       },
-      {upsert: true, new: true},
-      (err, doc) => err || doc.value
+      {upsert: true},
+      err => err
     )
   })
 
