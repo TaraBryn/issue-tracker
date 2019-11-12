@@ -58,8 +58,8 @@ module.exports = function (app, db) {
     //console.log('PUT project ', project);
     //console.log('PUT body', req.body);
     db.collection('projects').find(
-      {$elemMatch: {issues: {_id: new ObjectId(req.body._id)}}}, {},
-      (err, doc)=>console.log(err)
+      {"issues._id": req.body._id},
+      (err, doc)=>console.log(err || doc)
     )
   })
 
