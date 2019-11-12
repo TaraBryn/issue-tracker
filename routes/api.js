@@ -56,8 +56,9 @@ module.exports = function (app, db) {
     var project = req.params.project;
     console.log('PUT project ', project);
     console.log('PUT body', req.body);
-    db.collection('projects').update(
-      
+    db.collection('projects').find(
+      {$elemMatch: {issues: {id: req.body._id}}},
+      (err, doc)=>console.log(doc)
     )
   })
 
