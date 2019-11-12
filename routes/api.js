@@ -28,26 +28,12 @@ module.exports = function (app, db) {
   .post(function (req, res){
     var project = req.params.project;
     console.log(project);
-    db.collection('prjects').findAndModify({
-      query: {project},
-      
-    })
-    /*db.collection('projects').findAndModify(
+    db.collection('projects').findAndModify(
       {project}, 
-      {/*this would be the sort options},
+      {/*this would be the sort options*/},
       {
         $setOnInsert: {
-          project,
-          issues: [
-            {_id: new ObjectId(),
-            created_on: new Date(),
-            updated_on: new Date(),
-            issue_title: req.body.issue_title,
-            issue_text: req.body.issue_text,
-            created_by: req.body.created_by,
-            assigned_to: req.body.assigned_to,
-            open: true}
-          ]
+          project
         },
         $push: {
           issues: {
@@ -64,7 +50,7 @@ module.exports = function (app, db) {
       },
       {upsert: true, new: true},
       (err, doc) => console.log(err ? err : doc)
-    )*/
+    )
   })
 
   .put(function (req, res){
