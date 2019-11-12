@@ -13,9 +13,7 @@ var runner            = require('./test-runner');
 
 var app = express();
 
-app.use('/public', express.static(process.cwd() + '/public'));
 
-app.use(cors({origin: '*'})); //For FCC testing purposes only
 
 app.use(helmet({
   hsts: {force: true},
@@ -26,6 +24,10 @@ app.use(helmet({
     imgSrc: ["'self'", "https://hyperdev.com/", "http://glitch.com/"]
   }}
 }))
+
+app.use('/public', express.static(process.cwd() + '/public'));
+
+app.use(cors({origin: '*'})); //For FCC testing purposes only
 
 
 

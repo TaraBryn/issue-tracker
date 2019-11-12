@@ -29,11 +29,21 @@ module.exports = function (app, db) {
     var project = req.params.project;
     console.log(project);
     db.collection('projects').findAndModify(
-      {project}, {/*this would be th*/},
+      {project}, 
+      {/*this would be the sort options*/},
       {
         $setOnInsert: {
           project,
-          issues: []
+          issues: [
+            {_id: new ObjectId(),
+            created_on: new Date(),
+            updated_on: new Date(),
+            issue_title: req.body.issue_title,
+            issue_text: req.body.issue_text,
+            created_by: req.body.created_by,
+            assigned_to: req.body.assigned_to,
+            open: true}
+          ]
         },
         $push: {
           issues: {
