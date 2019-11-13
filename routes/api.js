@@ -44,6 +44,7 @@ module.exports = function (app, db) {
             issue_text: req.body.issue_text,
             created_by: req.body.created_by,
             assigned_to: req.body.assigned_to,
+            status_text: req.body.status_text,
             open: true
           }
         }
@@ -55,10 +56,17 @@ module.exports = function (app, db) {
 
   .put(function (req, res){
     var project = req.params.project;
+    
     var _id = req.body._id;
+    
     var issue_title = req.body.issue_title == '';
-    //console.log('PUT project ', project);
-    //console.log('PUT body', req.body);
+    var issue_text = req.body.issue_text;
+    var created_by = req.body.created_by;
+    var assigned_to = req.body.assigned_to;
+    var status_text = req.body.status_text;
+    
+    if (!(issue_title || issue_text || created_by || assigned_to || status_text))
+      return 'no updated field sent';
     
     /*db.collection('projects').findAndModify({
       query: {'issues._id': new ObjectId(req.body._id)},
@@ -72,12 +80,33 @@ module.exports = function (app, db) {
     db.collection('projects').find(
     {'issues._id': new ObjectId(_id)},
     (err, doc) => {
-      if (err) return console.log('find error ', err);
+      if (err) return 'find error: ' + JSON.stringify(err);
       try{
         //doc.forEach(e=>console.log(e));
+        var project_id = doc[0]._id;
         var issue = doc[0].issues.filter(e=>e._id==_id)[0];
+        
+        issue_title = issue_title || issue.issue_title;
+        issue_text = issue_text || issue.issue_text;
+        created_by = created_by || issue.created_by;
+        assigned_to = assigned_to || issue.assigned_to;
+        status_text = status_text || issue.status_text;
+        
+        db.findAndModify({
+          query: {_id: ObjectId(project_id)},
+          update: {
+            $set: {
+              issue_title,
+              issue_text,
+              created_by,
+              assigned_to,
+              status_text
+            }
+          }
+        })
+        
       }
-      catch(e){console.log('array error ', e)}
+      catch(e){return 'array error: ' + JSON.stringify(e)}
     })
   })
 
