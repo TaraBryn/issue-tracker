@@ -65,7 +65,7 @@ module.exports = function (app, db) {
         update: {$set: {'issues.date_updated': new Date()}},
         new: true
       },
-      (err, doc) => err || doc
+      (err, doc) => console.log(err || doc.value)
     )
   })
 
