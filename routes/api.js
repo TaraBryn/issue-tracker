@@ -58,11 +58,17 @@ module.exports = function (app, db) {
     //console.log('PUT project ', project);
     //console.log('PUT body', req.body);
     db.collection('projects').find(
-      {"issues": {_id: new ObjectId(req.body._id)}}, {},
-      (err, doc)=>err || doc
-    ).then(function(array){
-      console.log(array);
-    }).catch(error=>console.log(error))
+    {'issues': {$elemMatch: {_id: new ObjectId(req.body._id)}}},
+    (err, doc) => {
+      if (err) return console.log('find error ', err);
+      try{
+        doc.forEach(function(element){
+          console.log(element);
+        })
+        console.log('complete');
+      }
+      catch(e){console.log('array error ', e)}
+    })
   })
 
   .delete(function (req, res){
