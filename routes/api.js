@@ -68,21 +68,11 @@ module.exports = function (app, db) {
     if (!(issue_title || issue_text || created_by || assigned_to || status_text))
       return 'no updated field sent';
     
-    /*db.collection('projects').findAndModify({
-      query: {'issues._id': new ObjectId(req.body._id)},
-      update: {
-        $set: {
-          
-        }
-      }
-    })*/
-    
     db.collection('projects').find(
     {'issues._id': new ObjectId(_id)},
     (err, doc) => {
       if (err) return 'could not update' + _id;
       try{
-        //doc.forEach(e=>console.log(e));
         var project_id = doc[0]._id;
         var issue = doc[0].issues.filter(e=>e._id==_id)[0];
         
@@ -94,20 +84,16 @@ module.exports = function (app, db) {
         
         db.findAndModify({
           query: {
-            _id: ObjectId(project_id),
-            'issues': {$elemMatch: {_id: ObjectId(_id)}}
+            _id: new ObjectId(project_id),
+            'issues': {$elemMatch: {_id: new ObjectId(_id)}}
           },
           update: {
             $set: {
-              'issues.$': 
-              {
-                issue_title,
-                issue_text,
-                created_by,
-                assigned_to,
-                status_text,
-                updated_on: new Date()
-              }
+              'issues.$.issue_title': issue_title,
+              'issues.$.issue_text': issue_text,
+              'issues.$.created_by': created_by,
+              'issues.$.assigned_to': assigned_to,
+              'issues.$.status.text': status_text
             }
           }
         })
