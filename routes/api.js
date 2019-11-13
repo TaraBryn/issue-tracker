@@ -77,7 +77,12 @@ module.exports = function (app, db) {
         db.collection('projects').update(
           {'issues._id': ObjectId(_id)},
           {
-            
+            $set: {
+              'issues.$.issue_title': issue_title,
+              'issues.$.issue_text': issue_text,
+              'issues.$.created_by': created_by,
+              'issu'
+            }
           }
         )
       }
