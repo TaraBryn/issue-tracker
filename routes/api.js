@@ -55,30 +55,30 @@ module.exports = function (app, db) {
 
   .put(function (req, res){
     var project = req.params.project;
+    var _id = req.body._id;
+    var issue_title = req.body.issue_title == '';
     //console.log('PUT project ', project);
     //console.log('PUT body', req.body);
     
-    db.collection('projects').findAndModify({
+    /*db.collection('projects').findAndModify({
       query: {'issues._id': new ObjectId(req.body._id)},
       update: {
         $set: {
           
         }
       }
-    })
+    })*/
     
-    /*db.collection('projects').find(
-    {'issues._id': new ObjectId(req.body._id)},
+    db.collection('projects').find(
+    {'issues._id': new ObjectId(_id)},
     (err, doc) => {
       if (err) return console.log('find error ', err);
       try{
-        doc.forEach(function(element){
-          console.log(element);
-        })
-        console.log('complete');
+        //doc.forEach(e=>console.log(e));
+        var issue = doc[0].issues.filter(e=>e._id==_id)[0];
       }
       catch(e){console.log('array error ', e)}
-    })*/
+    })
   })
 
   .delete(function (req, res){
