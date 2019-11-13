@@ -27,7 +27,6 @@ module.exports = function (app, db) {
 
   .post(function (req, res){
     var project = req.params.project;
-    console.log(project);
     db.collection('projects').findAndModify(
       {project}, 
       {/*this would be the sort options*/},
@@ -68,7 +67,7 @@ module.exports = function (app, db) {
     if (!(issue_title || issue_text || created_by || assigned_to || status_text))
       return 'no updated field sent';
     
-    db.collection('projects').find(
+    /*db.collection('projects').find(
     {'issues._id': new ObjectId(_id)},
     (err, doc) => {
       if (err) return 'could not update' + _id;
@@ -89,18 +88,18 @@ module.exports = function (app, db) {
           },
           update: {
             $set: {
-              'issues.$.issue_title': issue_title,
-              'issues.$.issue_text': issue_text,
-              'issues.$.created_by': created_by,
-              'issues.$.assigned_to': assigned_to,
-              'issues.$.status.text': status_text
+              'issues.$issue_title': issue_title,
+              'issues.$issue_text': issue_text,
+              'issues.$created_by': created_by,
+              'issues.$assigned_to': assigned_to,
+              'issues.$status.text': status_text
             }
           }
         })
         
       }
       catch(e){return 'could not update' + _id}
-    })
+    })*/
     return 'successfully updated';
   })
 
