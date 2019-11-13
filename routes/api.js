@@ -75,15 +75,18 @@ module.exports = function (app, db) {
         assigned_to = assigned_to || issue.assigned_to;
         status_text = status_text || issue.status_text;
         db.collection('projects').update(
-          {'issues._id': ObjectId(_id)},
+          {_id: ObjectId(project_id), 'issues._id': ObjectId(_id)},
           {
             $set: {
               'issues.$.issue_title': issue_title,
               'issues.$.issue_text': issue_text,
               'issues.$.created_by': created_by,
-              'issu'
+              'issues.$.assigned_to': assigned_to,
+              'issues.$.status_text': status_text,
+              'issues.$.open': !open
             }
-          }
+          },
+          e => e ? return 'could not update ' + _id : 'successfully updated'
         )
       }
     )
