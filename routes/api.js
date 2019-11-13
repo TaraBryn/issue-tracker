@@ -54,12 +54,11 @@ module.exports = function (app, db) {
   })
 
   .put(function (req, res){
-    console.log('test')
     var project = req.params.project;
     var {_id, issue_title, issue_text, created_by, assigned_to, status_text, open} = req.body;
     if(!(issue_title || issue_text || created_by || assigned_to || status_text || open))
       return 'no updated field sent';
-    db.collection('projects').findAndModify(
+    return db.collection('projects').findAndModify(
       {'issues._id': ObjectId(_id)}, {},
       {
         $set: {'issues.$.updated_on': new Date()}
@@ -74,7 +73,7 @@ module.exports = function (app, db) {
         created_by = created_by || issue.created_by;
         assigned_to = assigned_to || issue.assigned_to;
         status_text = status_text || issue.status_text;
-        db.collection('projects').update(
+        return db.collection('projects').update(
           {_id: ObjectId(project_id), 'issues._id': ObjectId(_id)},
           {
             $set: {
@@ -86,7 +85,7 @@ module.exports = function (app, db) {
               'issues.$.open': !open
             }
           },
-          e => e ? return 'could not update ' + _id : 'successfully updated'
+          e => e ? 'could not update ' + _id : 'successfully updated'
         )
       }
     )
