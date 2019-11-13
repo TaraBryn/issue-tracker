@@ -62,18 +62,11 @@ module.exports = function (app, db) {
     db.collection('projects').findAndModify(
       {
         query: {'issues._id': ObjectId(_id)},
-        update: {'issues.date_updated': new Date()}
+        update: {$set: {'issues.date_updated': new Date()}},
+        new: true
       },
       (err, doc) => err || doc
     )
-    .toArray()
-    .then(function(data){
-      console.log(data);
-      try{
-        console.log(data)
-      }
-      catch(err) {return 'could not update ' + _id;}
-    });
   })
 
   .delete(function (req, res){
