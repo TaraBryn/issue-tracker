@@ -60,12 +60,16 @@ module.exports = function (app, db) {
     if(!(issue_title || issue_text || created_by || assigned_to || status_text || open))
       return 'no updated field sent';
     db.collection('projects').findAndModify(
+      {'issues._id': ObjectId(_id)}, {},
       {
-        query: {'issues._id': ObjectId(_id)},
-        update: {$set: {'issues.date_updated': new Date()}},
-        new: true
+        $set: {'issues.$.updated_on': new Date()}
       },
-      (err, doc) => console.log(err || doc.value)
+      {new: true},
+      (err, doc) => {
+        if (err) return 'could not update ' + _id;
+        var project_id = doc.value._id;
+        var 
+      }
     )
   })
 
