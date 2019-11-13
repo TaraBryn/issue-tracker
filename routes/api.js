@@ -57,8 +57,18 @@ module.exports = function (app, db) {
     var project = req.params.project;
     //console.log('PUT project ', project);
     //console.log('PUT body', req.body);
-    db.collection('projects').find(
-    {'issues': {$elemMatch: {_id: new ObjectId(req.body._id)}}},
+    
+    db.collection('projects').findAndModify({
+      query: {'issues._id': new ObjectId(req.body._id)},
+      update: {
+        $set: {
+          
+        }
+      }
+    })
+    
+    /*db.collection('projects').find(
+    {'issues._id': new ObjectId(req.body._id)},
     (err, doc) => {
       if (err) return console.log('find error ', err);
       try{
@@ -68,7 +78,7 @@ module.exports = function (app, db) {
         console.log('complete');
       }
       catch(e){console.log('array error ', e)}
-    })
+    })*/
   })
 
   .delete(function (req, res){
