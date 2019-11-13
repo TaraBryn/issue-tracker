@@ -68,7 +68,18 @@ module.exports = function (app, db) {
       (err, doc) => {
         if (err) return 'could not update ' + _id;
         var project_id = doc.value._id;
-        var 
+        var issue = doc.value.issues.filter(e=>e._id==_id)[0];
+        issue_title = issue_title || issue.issue_title;
+        issue_text = issue_text || issue.issue_text;
+        created_by = created_by || issue.created_by;
+        assigned_to = assigned_to || issue.assigned_to;
+        status_text = status_text || issue.status_text;
+        db.collection('projects').update(
+          {'issues._id': ObjectId(_id)},
+          {
+            
+          }
+        )
       }
     )
   })
