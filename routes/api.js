@@ -80,7 +80,7 @@ module.exports = function (app, db) {
     db.collection('projects').find(
     {'issues._id': new ObjectId(_id)},
     (err, doc) => {
-      if (err) return 'find error: ' + JSON.stringify(err);
+      if (err) return 'could not update' + _id;
       try{
         //doc.forEach(e=>console.log(e));
         var project_id = doc[0]._id;
@@ -93,21 +93,29 @@ module.exports = function (app, db) {
         status_text = status_text || issue.status_text;
         
         db.findAndModify({
-          query: {_id: ObjectId(project_id)},
+          query: {
+            _id: ObjectId(project_id),
+            'issues': {$elemMatch: {_id: ObjectId(_id)}}
+          },
           update: {
             $set: {
-              issue_title,
-              issue_text,
-              created_by,
-              assigned_to,
-              status_text
+              'issues.$': 
+              {
+                issue_title,
+                issue_text,
+                created_by,
+                assigned_to,
+                status_text,
+                updated_on: new Date()
+              }
             }
           }
         })
         
       }
-      catch(e){return 'array error: ' + JSON.stringify(e)}
+      catch(e){return 'could not update' + _id}
     })
+    return 'successfully updated';
   })
 
   .delete(function (req, res){
