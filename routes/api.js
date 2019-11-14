@@ -21,8 +21,23 @@ module.exports = function (app, db) {
 
   .get(function (req, res){
     var project = req.params.project;
-    console.log('GET project ', project);
-    console.log('GET body ', req.body);
+    var {
+      _id, 
+      created_on, 
+      updated_on, 
+      issue_title, 
+      issue_text, 
+      created_by, 
+      assigned_to, 
+      status_text, 
+      open
+    } = req.query;
+    db.collection('projects').find(
+      {project},
+      (err, doc) => {
+        
+      }
+    )
   })
 
   .post(function (req, res){
