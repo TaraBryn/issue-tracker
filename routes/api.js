@@ -32,12 +32,19 @@ module.exports = function (app, db) {
       status_text, 
       open
     } = req.query;
+    var result;
     db.collection('projects').find(
       {project},
       (err, doc) => {
-        
+        if (err) return result = err;
       }
     )
+    .toArray()
+    .next(data => {
+      if (result) return result;
+      
+    })
+    return res.json(result);
   })
 
   .post(function (req, res){
