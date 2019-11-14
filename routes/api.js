@@ -27,6 +27,7 @@ module.exports = function (app, db) {
 
   .post(function (req, res){
     var project = req.params.project;
+    var result;
     db.collection('projects').findAndModify(
       {project}, 
       {/*this would be the sort options*/},
@@ -49,8 +50,9 @@ module.exports = function (app, db) {
         }
       },
       {upsert: true, new: true},
-      (err, doc) => err ? {error: true, err} : {error: false, document: doc.value}
+      (err, doc) => result = err || doc.value
     )
+    return result;
   })
 
   .put(function (req, res){
@@ -58,14 +60,15 @@ module.exports = function (app, db) {
     var {_id, issue_title, issue_text, created_by, assigned_to, status_text, open} = req.body;
     if(!(issue_title || issue_text || created_by || assigned_to || status_text || open))
       return 'no updated field sent';
-    return db.collection('projects').findAndModify(
+    var result;
+    db.collection('projects').findAndModify(
       {project, 'issues._id': ObjectId(_id)}, {},
       {
         $set: {'issues.$.updated_on': new Date()}
       },
       {new: true},
       (err, doc) => {
-        if (err) return 'could not update ' + _id;
+        if (err) result = 'could not update ' + _id;
         var project_id = doc.value._id;
         var issue = doc.value.issues.filter(e=>e._id==_id)[0];
         issue_title = issue_title || issue.issue_title;
@@ -85,23 +88,24 @@ module.exports = function (app, db) {
               'issues.$.open': !open
             }
           },
-          e => e ? 'could not update ' + _id : 'successfully updated'
+          e => result = e ? 'could not update ' + _id : 'successfully updated'
         )
       }
     )
+    return result;
   })
 
   .delete(function (req, res){
     var project = req.params.project;
     var _id = req.body._id;
+    var result;
     return db.collection('projects').findAndModify(
       {project, 'issues._id': ObjectId(_id)}, {},
       {$pull: {'issues': {'_id': ObjectId(_id)}}},
       {new: true},
       (err, doc) => {
-        if(err) return console.log(err);
-        console.log(_id);
-        return console.log(doc.value ? '_id error' : 'deleted ' + _id);
+        if(err) result = 'could not delete ' + _id;
+        result = doc.value ? '_id error' : 'deleted ' + _id;
       }
     )
   });
