@@ -42,7 +42,17 @@ module.exports = function (app, db) {
     .toArray()
     .next(data => {
       if (result) return result;
-      
+      result = data.issues.filter(function(issue){
+        return (!_id || issue._id == _id)
+        && (!created_on || issue.created_on == created_on)
+        && (!updated_on || issue.updated_on == updated_on)
+        && (!issue_title || issue.issue_title == issue_title)
+        && (!issue_text || issue.issue_text == issue_text)
+        && (!created_by || issue.created_by == created_by)
+        && (!assigned_to || issue.assigned_to == assigned_to)
+        && (!status_text || issue.status_text == status_text)
+        && (open === undefined || issue.open == open)
+      })
     })
     return res.json(result);
   })
