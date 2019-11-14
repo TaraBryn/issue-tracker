@@ -21,7 +21,6 @@ module.exports = function (app, db) {
 
   .get(function (req, res){
     var project = req.params.project;
-    console.log(project)
     var {
       _id, 
       created_on, 
@@ -35,16 +34,17 @@ module.exports = function (app, db) {
     } = req.query;
     var result;
     db.collection('projects').find(
-      {'project': project}, {},
+      {project},
       (err, doc) => {
         if (err) return result = err;
-        return doc || [];
+        return doc;
       }
     )
     .toArray()
-    .next(data => {
+    .then(data => {
+      console.log(data);
       if (result) return result;
-      if (data.length == 0) return [];
+      if (data.length == 0) result = [];
       result = data[0].issues.filter(function(issue){
         return (!_id || issue._id == _id)
         && (!created_on || issue.created_on == created_on)
@@ -57,6 +57,7 @@ module.exports = function (app, db) {
         && (open === undefined || issue.open == open)
       })
     })
+    console.log(result);
     return res.json(result);
   })
 
