@@ -59,7 +59,7 @@ module.exports = function (app, db) {
     if(!(issue_title || issue_text || created_by || assigned_to || status_text || open))
       return 'no updated field sent';
     return db.collection('projects').findAndModify(
-      {'issues._id': ObjectId(_id)}, {},
+      {project, 'issues._id': ObjectId(_id)}, {},
       {
         $set: {'issues.$.updated_on': new Date()}
       },
@@ -95,10 +95,12 @@ module.exports = function (app, db) {
     var project = req.params.project;
     var _id = req.body._id;
     return db.collection('projects').findAndModify(
-      {'issues._id': ObjectId(_id)}, {},
-      {$pull: {'issues: {_id': ObjectId(_id)}},
+      {project, 'issues._id': ObjectId(_id)}, {},
+      {$pull: {'issues': {'_id': ObjectId(_id)}}},
+      {new: true},
       (err, doc) => {
         if(err) return console.log(err);
+        console.log(_id);
         return console.log(doc.value ? '_id error' : 'deleted ' + _id);
       }
     )
