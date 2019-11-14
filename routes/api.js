@@ -93,8 +93,17 @@ module.exports = function (app, db) {
 
   .delete(function (req, res){
     var project = req.params.project;
-    console.log('DELETE project', project);
-    console.log('DELETE body', req.body);
+    var _id = req.body.id;
+    db.findAndModify(
+      {'issues._id': ObjectId(_id)}, {},
+      {
+        $pull: {'issues._id': ObjectId(_id)}
+      },
+      (err, doc) => {
+        if(err) return 'could not delete ' + _id;
+        
+      }
+    )
   });
 
 };
