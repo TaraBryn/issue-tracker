@@ -99,7 +99,7 @@ module.exports = function (app, db) {
     var project = req.params.project;
     var _id = req.body._id;
     var result;
-    return db.collection('projects').findAndModify(
+    db.collection('projects').findAndModify(
       {project, 'issues._id': ObjectId(_id)}, {},
       {$pull: {'issues': {'_id': ObjectId(_id)}}},
       {new: true},
@@ -108,6 +108,7 @@ module.exports = function (app, db) {
         result = doc.value ? '_id error' : 'deleted ' + _id;
       }
     )
+    return result;
   });
 
 };
