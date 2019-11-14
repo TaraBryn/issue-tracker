@@ -35,14 +35,14 @@ module.exports = function (app, db) {
     } = req.query;
     var result;
     db.collection('projects').find(
-      {project},
+      {'project': project}, {},
       (err, doc) => {
         if (err) return result = err;
-        return doc;
+        return doc || [];
       }
     )
+    .toArray()
     .next(data => {
-      data = data.toArray();
       if (result) return result;
       if (data.length == 0) return [];
       result = data[0].issues.filter(function(issue){
